@@ -73,9 +73,17 @@ class WordCloud(Widget):
     '`layout_interval` how much time to wait between two words'
     layout_interval = NumericProperty(0.01)
 
+    '''`angle_increase` manage how much the angle increases each
+    iteration'''
+    angle_increase = NumericProperty(pi / 100)
+
+    '''`distance_increase` manage how much the distance from center
+    increases each iteration.'''
+    distance_increase = NumericProperty(.1)
+
     '`zoom` A predefined animation to zoom the focused word'
     zoom = (
-        Animation(zoom=1.2, d=.7, t='out_elastic')
+        Animation(zoom=1.1, d=.7, t='out_elastic')
         + Animation(d=.3)
         + Animation(zoom=1, d=.3, t='out_quad')
     )
@@ -111,14 +119,14 @@ class WordCloud(Widget):
         if self.words:
             lbl = self.cache.get(choice(self.words))
             if lbl:
-                self.zoom.cancel(lbl)
-                self.zoom.start(lbl)
+                # self.zoom.cancel(lbl)
+                # self.zoom.start(lbl)
 
                 self.flash.cancel(lbl)
                 self.flash.start(lbl)
 
-                self.bounce.cancel(lbl)
-                self.bounce.start(lbl)
+                # self.bounce.cancel(lbl)
+                # self.bounce.start(lbl)
 
         Clock.schedule_once(self.animate_focused_word, abs(gauss(.5, .3)))
 
@@ -153,8 +161,8 @@ class WordCloud(Widget):
                 lbl.collide_widget(x)
                 for x in self.children
             ):
-                self._angle += pi / 50
-                self._distance += 1
+                self._angle += self.angle_increase
+                self._distance += self.distance_increase
 
                 lbl.center = (
                     self.center_x + cos(self._angle) * self._distance,
@@ -201,9 +209,11 @@ if __name__ == '__main__':
     def do_open(*args):
         root.clear_widgets()
         wc = WordCloud(
+            angle_increase=pi/100,
+            distance_increase=.1,
             label_options=dict(
                 font_size=40,
-                padding=(10, 10),
+                padding=(1, 1),
             ),
             label_cls='CloudLabel',
             words = (
