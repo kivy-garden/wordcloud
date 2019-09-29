@@ -81,31 +81,6 @@ class WordCloud(Widget):
     increases each iteration.'''
     distance_increase = NumericProperty(.1)
 
-    '`zoom` A predefined animation to zoom the focused word'
-    zoom = (
-        Animation(zoom=1.1, d=.7, t='out_elastic')
-        + Animation(d=.3)
-        + Animation(zoom=1, d=.3, t='out_quad')
-    )
-
-    '`tilt` A predefined animation to tilt the focused word'
-    tilt = (
-        Animation(angle=25, d=.1, t='out_quad')
-        + Animation(angle=0, d=.5, t='out_elastic')
-    )
-
-    '`bounce` A predefined animation to bounce the focused word'
-    bounce = (
-        Animation(offset_y=25, d=.1, t='out_quad')
-        + Animation(offset_y=0, d=.5, t='out_bounce')
-    )
-
-    '`flash` A predefined animation to flash the focused word'
-    flash = (
-        Animation(tint=(5, 5, 5, 2), d=.1, t='out_quad')
-        + Animation(tint=(1, 1, 1, 1), d=.5, t='out_bounce')
-    )
-
     __events__ = ('on_post_populate', 'on_pre_populate')
 
     def __init__(self, **kwargs):
@@ -114,19 +89,41 @@ class WordCloud(Widget):
         super(WordCloud, self).__init__(**kwargs)
 
     def animate_focused_word(self, dt=0):
-        '''
+        '''Override this method to customize the effect on focused word.
+
+        exmaple of possible animations::
+
+            zoom = (
+                Animation(zoom=1.1, d=.7, t='out_elastic')
+                + Animation(d=.3)
+                + Animation(zoom=1, d=.3, t='out_quad')
+            )
+
+            bounce = (
+                Animation(offset_y=25, d=.1, t='out_quad')
+                + Animation(offset_y=0, d=.5, t='out_bounce')
+            )
+
+            flash = (
+                Animation(tint=(5, 5, 5, 2), d=.1, t='out_quad')
+                + Animation(tint=(1, 1, 1, 1), d=.5, t='out_bounce')
+            )
+
+        Don't forget to cancel any previous animation of the animated
+        properties before starting one, to avoid fighting between
+        animations.
+
         '''
         if self.words:
             lbl = self.cache.get(choice(self.words))
             if lbl:
-                # self.zoom.cancel(lbl)
-                # self.zoom.start(lbl)
+                Animation.cancel_all(lbl, 'zoom')
+                (
+                    Animation(zoom=1.1, d=.7, t='out_elastic')
+                    + Animation(d=.3)
+                    + Animation(zoom=1, d=.3, t='out_quad')
+                ).start(lbl)
 
-                self.flash.cancel(lbl)
-                self.flash.start(lbl)
-
-                # self.bounce.cancel(lbl)
-                # self.bounce.start(lbl)
 
         Clock.schedule_once(self.animate_focused_word, abs(gauss(.5, .3)))
 
