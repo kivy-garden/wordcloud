@@ -1,5 +1,5 @@
 CONTRIBUTING
-==============
+============
 
 This software is open source and welcomes open contributions, there are just
 a few guidelines, if you are unsure about them, please ask and guidance will be
@@ -36,7 +36,7 @@ provided.
   are not the copyright holder.
 
 Tips
-------
+----
 
 You can install the package in `editable` mode, with the `dev` option,
 to easily have all the required tools to check your edits.

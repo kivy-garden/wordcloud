@@ -1,7 +1,6 @@
 import pytest
 
 
-def test_flower():
-    from kivy_garden.flower import FlowerLabel
-    label = FlowerLabel()
-    assert label.text == 'Demo flower'
+def test_instanciate():
+    from kivy_garden.wordcloud import WordCloud
+    label = WordCloud()
