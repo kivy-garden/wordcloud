@@ -15,7 +15,7 @@ from kivy.properties import (
     NumericProperty,
 )
 
-__version__ = '1.0.0'
+__version__ = '1.1.0-dev'
 
 
 Builder.load_string('''
